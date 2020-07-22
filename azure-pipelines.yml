@@ -14,7 +14,14 @@ jobs:
         condition: and(succeeded(), eq(variables['ES_CACHE_RESTORED'], true))
         inputs:
           script: |
-            docker save -o ${{ variables.DOCKER_CACHE_FOLDER }}/custom-es.tar custom-es:7.8.0
+            docker save -o $(DOCKER_CACHE_FOLDER)/custom-es.tar custom-es:7.8.0
+
+      - task: CmdLine@2
+        displayName: echo
+        inputs:
+          script: |
+            echo $(DOCKER_CACHE_FOLDER) &&
+            echo $(DOCKER_CACHE_FOLDER)
 
       - task: Docker@2
         displayName: Build ES
@@ -27,15 +34,14 @@ jobs:
         displayName: backup ES
         inputs:
           script: |
-            mkdir -p ${{ variables.DOCKER_CACHE_FOLDER }} &&
-            docker save custom-es:7.8.0 > ${{ variables.DOCKER_CACHE_FOLDER }}/custom-es.tar
+            mkdir -p $(DOCKER_CACHE_FOLDER) &&
+            docker save custom-es:7.8.0 > $(DOCKER_CACHE_FOLDER)/custom-es.tar
 
       - task: Cache@2
         inputs:
           key: ./Dockerfile
           restoreKeys: |
              es | "$(Agent.OS)"
-             yarn
           path: $(DOCKER_CACHE_FOLDER)
           cacheHitVar: ES_CACHE_RESTORED
         displayName: Cache docker
