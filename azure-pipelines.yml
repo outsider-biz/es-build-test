@@ -15,5 +15,6 @@ jobs:
 
       - task: CmdLine@2
         displayName: Pull ES
-        inputs: |
-          docker pull cowsoul94/elasticsearch-with-analyzers:7.8.0
+        inputs:
+          script: |
+            docker pull cowsoul94/elasticsearch-with-analyzers:7.8.0
