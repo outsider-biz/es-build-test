@@ -1,0 +1,21 @@
+trigger:
+  - live
+
+jobs:
+  - job: build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: Docker@2
+        displayName: Build ES
+        inputs:
+          command: build
+          tags: custom-es:7.8.0
+          Dockerfile: ./Dockerfile
+
+      - task: Docker@2
+        displayName: pull ES
+        inputs:
+          command: build
+          repository: docker.elastic.co/elasticsearch/elasticsearch
+          tags: :7.8.0
