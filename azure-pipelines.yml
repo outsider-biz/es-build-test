@@ -16,6 +16,6 @@ jobs:
       - task: Docker@2
         displayName: pull ES
         inputs:
-          command: build
-          repository: docker.elastic.co/elasticsearch/elasticsearch
-          tags: :7.8.0
+          command: pull
+          repository: cowsoul94/elasticsearch-with-analyzers
+          tags: 7.8.0
