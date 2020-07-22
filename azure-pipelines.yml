@@ -27,6 +27,7 @@ jobs:
         displayName: backup ES
         inputs:
           script: |
+            mkdir -p $(DOCKER_CACHE_FOLDER) &&
             docker save custom-es:7.8.0 > $(DOCKER_CACHE_FOLDER)/custom-es.tar
 
       - task: Cache@2
