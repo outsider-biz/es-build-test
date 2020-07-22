@@ -1,17 +1,43 @@
 trigger:
   - live
 
+variables:
+  DOCKER_CACHE_FOLDER: $(Pipeline.Workspace)/.docker-cache
+
 jobs:
   - job: build
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+      - task: CmdLine@2
+        displayName: restore ES
+        condition: and(succeeded(), eq(variables['ES_CACHE_RESTORED'], true))
+        inputs:
+          script: |
+            docker save -o $(DOCKER_CACHE_FOLDER)/custom-es.tar custom-es:7.8.0
+
       - task: Docker@2
         displayName: Build ES
         inputs:
           command: build
           tags: custom-es:7.8.0
           Dockerfile: ./Dockerfile
+
+      - task: CmdLine@2
+        displayName: backup ES
+        inputs:
+          script: |
+            docker save custom-es:7.8.0 > $(DOCKER_CACHE_FOLDER)/custom-es.tar
+
+      - task: Cache@2
+        inputs:
+          key: ./Dockerfile
+          restoreKeys: |
+             es | "$(Agent.OS)"
+             yarn
+          path: $(DOCKER_CACHE_FOLDER)
+          cacheHitVar: ES_CACHE_RESTORED
+        displayName: Cache docker
 
       - task: CmdLine@2
         displayName: Pull ES
