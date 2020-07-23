@@ -34,7 +34,7 @@ jobs:
         displayName: backup ES
         inputs:
           script: |
-            docker save
+            docker save custom-es:7.8.0
 
       - task: CmdLine@2
         displayName: backup ES
