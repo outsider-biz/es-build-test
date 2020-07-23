@@ -20,6 +20,12 @@ jobs:
         displayName: Cache docker
 
       - task: CmdLine@2
+        displayName: save test ES
+        inputs:
+          script: |
+            touch $(DOCKER_CACHE_FOLDER)/test.txt
+
+      - task: CmdLine@2
         displayName: restore ES
         condition: eq(variables['ES_CACHE_RESTORED'], true)
         inputs:
