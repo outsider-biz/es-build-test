@@ -33,7 +33,7 @@ jobs:
 
       - task: Cache@2
         inputs:
-          key: ./Dockerfile
+          key: 'es | "$(Agent.OS)" | ./Dockerfile'
           restoreKeys: |
              es | "$(Agent.OS)"
           path: $(DOCKER_CACHE_FOLDER)
