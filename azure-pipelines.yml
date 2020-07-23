@@ -18,20 +18,30 @@ jobs:
           cacheHitVar: ES_CACHE_RESTORED
         displayName: Cache docker
 
+      - task: Cache@2
+        inputs:
+          key: 'test | hello'
+          restoreKeys: |
+             test
+          path: $(Pipeline.Workspace)
+          cacheHitVar: TEST_CACHE_RESTORED
+        displayName: Cache test
+
       - task: CmdLine@2
         displayName: save test ES
         inputs:
           script: |
             mkdir -p $(DOCKER_CACHE_FOLDER) &&
-            touch $(DOCKER_CACHE_FOLDER)/test.txt &&
-            echo $(ES_CACHE_RESTORED)
+            touch $(DOCKER_CACHE_FOLDER)/test.txt
 
       - task: CmdLine@2
         displayName: echo
         inputs:
           script: |
             echo $(DOCKER_CACHE_FOLDER) &&
-            ls -la $(DOCKER_CACHE_FOLDER)/
+            ls -la $(DOCKER_CACHE_FOLDER)/  &&
+            echo $(ES_CACHE_RESTORED) &&
+            echo $(TEST_CACHE_RESTORED)
 
       - task: CmdLine@2
         displayName: restore ES
