@@ -13,7 +13,8 @@ jobs:
         inputs:
           key: 'es | "$(Agent.OS)" | ./Dockerfile'
           restoreKeys: |
-             es | "$(Agent.OS)" | ./Dockerfile'
+             es | "$(Agent.OS)"
+             es
           path: $(DOCKER_CACHE_FOLDER)
           cacheHitVar: ES_CACHE_RESTORED
         displayName: Cache docker
