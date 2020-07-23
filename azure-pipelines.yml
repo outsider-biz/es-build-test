@@ -27,6 +27,13 @@ jobs:
             touch $(DOCKER_CACHE_FOLDER)/test.txt
 
       - task: CmdLine@2
+        displayName: echo
+        inputs:
+          script: |
+            echo $(DOCKER_CACHE_FOLDER) &&
+            ls -la $(DOCKER_CACHE_FOLDER)/
+
+      - task: CmdLine@2
         displayName: restore ES
         condition: eq(variables['ES_CACHE_RESTORED'], true)
         inputs:
@@ -59,12 +66,6 @@ jobs:
         inputs:
           script: |
             docker run --rm -it -d -p 9200:9200 -e "discovery.type=single-node" custom-es:7.8.0
-
-      - task: CmdLine@2
-        displayName: echo
-        inputs:
-          script: |
-            echo hello
 
       - task: CmdLine@2
         displayName: echo
