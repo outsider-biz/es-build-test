@@ -23,6 +23,7 @@ jobs:
         displayName: save test ES
         inputs:
           script: |
+            mkdir -p $(DOCKER_CACHE_FOLDER) &&
             touch $(DOCKER_CACHE_FOLDER)/test.txt
 
       - task: CmdLine@2
