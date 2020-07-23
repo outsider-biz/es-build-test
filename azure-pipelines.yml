@@ -11,9 +11,8 @@ jobs:
     steps:
       - task: Cache@2
         inputs:
-          key: 'es | "$(Agent.OS)" | ./Dockerfile'
+          key: 'es | ./Dockerfile'
           restoreKeys: |
-             es | "$(Agent.OS)"
              es
           path: $(DOCKER_CACHE_FOLDER)
           cacheHitVar: ES_CACHE_RESTORED
@@ -24,7 +23,8 @@ jobs:
         inputs:
           script: |
             mkdir -p $(DOCKER_CACHE_FOLDER) &&
-            touch $(DOCKER_CACHE_FOLDER)/test.txt
+            touch $(DOCKER_CACHE_FOLDER)/test.txt &&
+            echo $(ES_CACHE_RESTORED)
 
       - task: CmdLine@2
         displayName: echo
