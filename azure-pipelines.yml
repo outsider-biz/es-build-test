@@ -9,9 +9,18 @@ jobs:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+      - task: Cache@2
+        inputs:
+          key: 'es | "$(Agent.OS)" | ./Dockerfile'
+          restoreKeys: |
+             es | "$(Agent.OS)" | ./Dockerfile'
+          path: $(DOCKER_CACHE_FOLDER)
+          cacheHitVar: ES_CACHE_RESTORED
+        displayName: Cache docker
+
       - task: CmdLine@2
         displayName: restore ES
-        condition: and(succeeded(), eq(variables['ES_CACHE_RESTORED'], true))
+        condition: eq(variables['ES_CACHE_RESTORED'], true)
         inputs:
           script: |
             docker save -o $(DOCKER_CACHE_FOLDER)/custom-es.tar custom-es:7.8.0
@@ -31,15 +40,6 @@ jobs:
             mkdir -p $(DOCKER_CACHE_FOLDER) &&
             docker save custom-es:7.8.0 > $(DOCKER_CACHE_FOLDER)/custom-es.tar
 
-      - task: Cache@2
-        inputs:
-          key: 'es | "$(Agent.OS)" | ./Dockerfile'
-          restoreKeys: |
-             es | "$(Agent.OS)"
-          path: $(DOCKER_CACHE_FOLDER)
-          cacheHitVar: ES_CACHE_RESTORED
-        displayName: Cache docker
-
       - task: CmdLine@2
         displayName: Pull ES
         inputs:
@@ -50,7 +50,7 @@ jobs:
         displayName: run ES
         inputs:
           script: |
-            docker run --rm -it -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" custom-es:7.8.0 -d
+            docker run --rm -it -d -p 9200:9200 -e "discovery.type=single-node" custom-es:7.8.0
 
       - task: CmdLine@2
         displayName: echo
@@ -62,4 +62,4 @@ jobs:
         displayName: echo
         inputs:
           script: |
-            curl http://127.0.0.1:9200
+            curl http://localhost:9200/
