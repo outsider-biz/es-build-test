@@ -27,14 +27,9 @@ jobs:
         displayName: Build ES
         inputs:
           command: build
-          tags: custom-es:7.8.0
+          repository: custom-es
+          tags: 7.8.0
           Dockerfile: ./Dockerfile
-
-      - task: CmdLine@2
-        displayName: backup ES
-        inputs:
-          script: |
-            docker save custom-es:7.8.0
 
       - task: CmdLine@2
         displayName: backup ES
