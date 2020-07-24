@@ -24,6 +24,7 @@ jobs:
         inputs:
           script: |
             ls -la $(DOCKER_CACHE_FOLDER) &&
+            ls -la $(DOCKER_CACHE_FOLDER)/custom-es.tar &&
             docker save -o $(DOCKER_CACHE_FOLDER)/custom-es.tar custom-es:7.8.0
 
       - task: Docker@2
