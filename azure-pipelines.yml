@@ -32,6 +32,7 @@ jobs:
           repository: custom-es
           tags: 7.8.0
           Dockerfile: ./Dockerfile
+        condition: ne(variables['ES_CACHE_RESTORED'], true)
 
       - task: CmdLine@2
         displayName: backup ES
