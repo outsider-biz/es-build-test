@@ -19,12 +19,6 @@ jobs:
         displayName: Cache docker
 
       - task: CmdLine@2
-        displayName: echo
-        inputs:
-          script: |
-            ls -la $(DOCKER_CACHE_FOLDER)/
-
-      - task: CmdLine@2
         displayName: restore ES
         condition: eq(variables['ES_CACHE_RESTORED'], true)
         inputs:
