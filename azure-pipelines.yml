@@ -13,7 +13,7 @@ jobs:
         inputs:
           key: 'v2 | es | ./Dockerfile'
           restoreKeys: |
-             es
+             v2 | es
           path: $(DOCKER_CACHE_FOLDER)
           cacheHitVar: ES_CACHE_RESTORED
         displayName: Cache docker
@@ -45,7 +45,7 @@ jobs:
         inputs:
           script: |
             mkdir -p $(DOCKER_CACHE_FOLDER) &&
-            docker save custom-es:7.8.0 | gzip > $(DOCKER_CACHE_FOLDER)/custom-es.tar.ga
+            docker save custom-es:7.8.0 | gzip > $(DOCKER_CACHE_FOLDER)/custom-es.tar.gz
         condition: ne(variables['ES_CACHE_RESTORED'], true)
 
       - task: CmdLine@2
