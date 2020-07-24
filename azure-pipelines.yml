@@ -11,7 +11,7 @@ jobs:
     steps:
       - task: Cache@2
         inputs:
-          key: 'es | ./Dockerfile'
+          key: 'v2 | es | ./Dockerfile'
           restoreKeys: |
              es
           path: $(DOCKER_CACHE_FOLDER)
