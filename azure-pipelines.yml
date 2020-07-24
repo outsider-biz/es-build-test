@@ -2,7 +2,7 @@ trigger:
   - live
 
 variables:
-  DOCKER_CACHE_FOLDER: $(Pipeline.Workspace)/.docker-cache
+  DOCKER_CACHE_FOLDER: $(Build.SourcesDirectory)/.docker-cache
 
 jobs:
   - job: build
@@ -23,7 +23,7 @@ jobs:
           key: 'test | hello'
           restoreKeys: |
              test
-          path: $(Pipeline.Workspace)
+          path: $(Build.SourcesDirectory)
           cacheHitVar: TEST_CACHE_RESTORED
         displayName: Cache test
 
@@ -41,7 +41,10 @@ jobs:
             echo $(DOCKER_CACHE_FOLDER) &&
             ls -la $(DOCKER_CACHE_FOLDER)/  &&
             echo $(ES_CACHE_RESTORED) &&
-            echo $(TEST_CACHE_RESTORED)
+            echo $(TEST_CACHE_RESTORED) &&
+            echo $(Build.SourcesDirectory) &&
+            echo $(Pipeline.Workspace)
+
 
       - task: CmdLine@2
         displayName: restore ES
@@ -81,4 +84,4 @@ jobs:
         displayName: echo
         inputs:
           script: |
-            curl http://localhost:9200/
+            bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:9200)" != "200" ]]; do sleep 5; done'
